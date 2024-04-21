@@ -22,18 +22,26 @@
         $bookName = $_POST['bookName'];
         $customer = $_POST['customer'];
 
-        // Prepare SQL statement to delete borrowing details from the database
-        $sql = "DELETE FROM borrow WHERE title='$bookName' AND customer='$customer'";
-        $updateSql = "UPDATE book SET `No. of Books` =  `No. of Books` + 1 WHERE title = '$bookName'";
+        // Prepare SQL statement to delete borrowing details and corresponding fine details
+        $deleteSql = "DELETE b, f FROM borrow AS b 
+                      LEFT JOIN fine AS f ON b.IdNo = f.transactionId
+                      WHERE b.title = ? AND b.customer = ?";
+        
+        // Prepare and bind parameters
+        $stmt = $conn->prepare($deleteSql);
+        $stmt->bind_param("ss", $bookName, $customer);
 
         // Execute SQL statement
-        if ($conn->query($sql) === TRUE && $conn->query($updateSql) === TRUE) {
+        if ($stmt->execute()) {
             // Redirect back to the borrowing page after successfully returning the book
             header('Location: script.php');
             exit(); // Ensure that no more output is sent after the header redirection
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            echo "Error deleting record: " . $stmt->error;
         }
+
+        // Close prepared statement
+        $stmt->close();
     }
 
     // Close connection

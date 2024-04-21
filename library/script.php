@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 if (isset($_SESSION['name'])) {
@@ -216,85 +215,112 @@ if (isset($_SESSION['name'])) {
 
         // Query to retrieve added books with their genres
         $sql = "SELECT b.*, g.genre_name 
-        FROM book AS b 
-        JOIN genre AS g ON b.genre_id = g.genre_id";
-        $result = $conn->query($sql);
+            FROM book AS b 
+            JOIN genre AS g ON b.genre_id = g.genre_id";
+    $result = $conn->query($sql);
 
-        echo "<h2>Available Books</h2>";
-        if ($result->num_rows > 0) {
-            echo "<div class='container mt-3'>";
-            echo "<table class='table table-striped'>";
-            echo "<thead>";
-            echo "<tr>";
-            echo "<th scope='col'>ID</th>";
-            echo "<th scope='col'>Title</th>";
-            echo "<th scope='col'>Author</th>";
-            echo "<th scope='col'>ISBN</th>";
-            echo "<th scope='col'>Genre</th>";
-            echo "<th scope='col'>No. of Books</th>";
-            echo "<th scope='col'>Action</th>";
-            echo "</tr>";
-            echo "</thead>";
-            echo "<tbody>";
+    echo "<h2>Available Books</h2>";
+    if ($result->num_rows > 0) {
+        echo "<div class='container mt-3'>";
+        echo "<table class='table table-striped'>";
+        echo "<thead>";
+        echo "<tr>";
+        echo "<th scope='col'>ID</th>";
+        echo "<th scope='col'>Title</th>";
+        echo "<th scope='col'>Author</th>";
+        echo "<th scope='col'>ISBN</th>";
+        echo "<th scope='col'>Genre</th>";
+        echo "<th scope='col'>No. of Books</th>";
+        echo "<th scope='col'>Action</th>";
+        echo "</tr>";
+        echo "</thead>";
+        echo "<tbody>";
 
-            while($row = $result->fetch_assoc()) {
-                if($row["No. of Books"]>0){
-                    echo "<tr>";
-                    echo "<td>" . $row["book_id"] . "</td>";
-                    echo "<td>" . $row["title"] . "</td>";
-                    echo "<td>" . $row["author"] . "</td>";
-                    echo "<td>" . $row["isbn"] . "</td>";
-                    echo "<td>" . $row["genre_name"] . "</td>";
-                    echo "<td>" . $row["No. of Books"] . "</td>";
-                    echo "<td>
-                    <form action='borrow.php' method='post'>
-                        <input type='hidden' name='bookName' value='" . $row["title"] . "'>
-                        <input type='hidden' name='author' value='" . $row["author"] . "'>
-                        <input type='hidden' name='genreId' value='" . $row["genre_id"] . "'>
-                        <input type='hidden' name='number' value='" . $row["No. of Books"] . "'>
-                        <input type='hidden' name='returnDate' value='" . date('Y-m-d', strtotime('+7 day')) . "'>
-                        <input type='hidden' name='employee' value='" . $employee . "'>
-                        <input name='customer' placeholder='Enter Customer name' required>
-                        <input type='submit' class='btn btn-primary' value='Borrow'>
-                    </form>
-                    </td>
-                    </tr>";
-                }
+        while($row = $result->fetch_assoc()) {
+            if($row["No. of Books"] > 0){
+                echo "<tr>";
+                echo "<td>" . $row["book_id"] . "</td>";
+                echo "<td>" . $row["title"] . "</td>";
+                echo "<td>" . $row["author"] . "</td>";
+                echo "<td>" . $row["isbn"] . "</td>";
+                echo "<td>" . $row["genre_name"] . "</td>";
+                echo "<td>" . $row["No. of Books"] . "</td>";
+                echo "<td>
+                <form action='borrow.php' method='post'>
+                    <input type='hidden' name='bookName' value='" . $row["title"] . "'>
+                    <input type='hidden' name='author' value='" . $row["author"] . "'>
+                    <input type='hidden' name='genreId' value='" . $row["genre_id"] . "'>
+                    <input type='hidden' name='number' value='" . $row["No. of Books"] . "'>
+                    <input type='hidden' name='returnDate' value='" . date('Y-m-d', strtotime('+7 day')) . "'>
+                    <input type='hidden' name='employee' value='" . $employee . "'>
+                    <input name='customer' placeholder='Enter Customer name' required>
+                    <input type='submit' class='btn btn-primary' value='Borrow'>
+                </form>
+                </td>
+                </tr>";
             }
-            echo "</tbody>";
-            echo "</table>";
-            echo "</div>";
-            echo "<hr>";
-            echo "<br>";
-        } else {
-            echo "<div class='alert alert-info' role='alert'>No books available now.</div>";
         }
+        echo "</tbody>";
+        echo "</table>";
+        echo "</div>";
+        echo "<hr>";
+        echo "<br>";
+    } else {
+        echo "<div class='alert alert-info' role='alert'>No books available now.</div>";
+    }
 
-        // $sql = "SELECT * FROM borrow";
-        $sql = "SELECT b.*, g.genre_name 
+    $sql = "SELECT b.*, g.genre_name 
         FROM borrow AS b 
         JOIN genre AS g ON b.genre_id = g.genre_id";
-        $result = $conn->query($sql);
-        // $result = $conn->query($sql);
+    $result = $conn->query($sql);
 
-        echo "<h2>Borrowed Books</h2>";
-        if ($result->num_rows > 0) {
-            echo "<div class='container mt-3'>";
-            echo "<table class='table table-striped'>";
-            echo "<thead>";
-            echo "<tr>";
-            echo "<th scope='col'>Name</th>";
-            echo "<th scope='col'>Author</th>";
-            echo "<th scope='col'>Genre</th>";
-            echo "<th scope='col'>Borrowed By</th>";
-            echo "<th scope='col'>Return Date</th>";
-            echo "<th scope='col'>Action</th>";
-            echo "</tr>";
-            echo "</thead>";
-            echo "<tbody>";
-            // Output data of each row
-            while($row = $result->fetch_assoc()) {
-                echo "<tr>
+    echo "<h2>Borrowed Books</h2>";
+    if ($result->num_rows > 0) {
+        echo "<div class='container mt-3'>";
+        echo "<table class='table table-striped'>";
+        echo "<thead>";
+        echo "<tr>";
+        echo "<th scope='col'>Name</th>";
+        echo "<th scope='col'>Author</th>";
+        echo "<th scope='col'>Genre</th>";
+        echo "<th scope='col'>Borrowed By</th>";
+        echo "<th scope='col'>Return Date</th>";
+        echo "<th scope='col'>Action</th>";
+        echo "</tr>";
+        echo "</thead>";
+        echo "<tbody>";
+        // Output data of each row
+        while($row = $result->fetch_assoc()) {
+            $returnDate = new DateTime($row["returnDate"]);
+            $currentDate = new DateTime();
+            if($currentDate > $returnDate) {
+                $difference = $currentDate->diff($returnDate)->days; // Difference in days
+                $fine = $difference * 10;
+            } else {
+                $fine = 0;
+            }
+
+            // Check if there are any existing fine records for this transaction
+            $checkFineSql = "SELECT * FROM fine WHERE transactionId = '" . $row['IdNo'] . "'";
+            $fineResult = $conn->query($checkFineSql);
+
+            if ($fineResult->num_rows == 0) {
+                // Insert a new fine record
+                $insertFineSql = "INSERT INTO fine (transactionId, amount, last_date) 
+                                VALUES ('" . $row['IdNo'] . "', $fine, '" . $row['returnDate'] . "')";
+                if ($conn->query($insertFineSql) !== TRUE) {
+                    echo "Error inserting fine record: " . $conn->error;
+                }
+            } else {
+                // Update existing fine record
+                $updateFineSql = "UPDATE fine SET amount = $fine WHERE transactionId = '" . $row['IdNo'] . "'";
+                if ($conn->query($updateFineSql) !== TRUE) {
+                    echo "Error updating fine record: " . $conn->error;
+                }
+            }
+
+            // Output the table row
+            echo "<tr>
                 <td>" . $row["title"] . "</td>
                 <td>" . $row["author"] . "</td>
                 <td>" . $row["genre_name"] . "</td> 
@@ -308,59 +334,60 @@ if (isset($_SESSION['name'])) {
                 </form>
                 </td>
                 </tr>";
-            }
-            echo "</tbody>";
-            echo "</table>";
-            echo "</div>";
-            echo "<hr>";
-            echo "<br>";
-        } else {
-            echo "<div class='alert alert-info' role='alert'>No books borrowed.</div>";
         }
+        echo "</tbody>";
+        echo "</table>";
+        echo "</div>";
+        echo "<hr>";
+        echo "<br>";
+    } else {
+        echo "<div class='alert alert-info' role='alert'>No books borrowed.</div>";
+    }
 
-        $sql = "SELECT * FROM borrow";
-        $result = $conn->query($sql);
 
-        echo "<h2>Fine Management</h2>";
-        if ($result->num_rows > 0) {
-            echo "<div class='container mt-3'>";
-            echo "<table class='table table-striped'>";
-            echo "<thead>";
+    $sql = "SELECT * FROM borrow";
+    $result = $conn->query($sql);
+
+    echo "<h2>Fine Management</h2>";
+    if ($result->num_rows > 0) {
+        echo "<div class='container mt-3'>";
+        echo "<table class='table table-striped'>";
+        echo "<thead>";
+        echo "<tr>";
+        echo "<th scope='col'>Book name</th>";
+        echo "<th scope='col'>Borrowed By</th>";
+        echo "<th scope='col'>Fine</th>";
+        echo "</tr>";
+        echo "</thead>";
+        echo "<tbody>";
+        // Output data of each row
+        while($row = $result->fetch_assoc()) {
             echo "<tr>";
-            echo "<th scope='col'>Book name</th>";
-            echo "<th scope='col'>Borrowed By</th>";
-            echo "<th scope='col'>Fine</th>";
-            echo "</tr>";
-            echo "</thead>";
-            echo "<tbody>";
-            // Output data of each row
-            while($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $row["title"] . "</td>";
-                echo "<td>" . $row["customer"] . "</td>";
-                // Calculate fine based on the return date
-                $returnDate = new DateTime($row["returnDate"]);
-                $currentDate = new DateTime();
-                if($currentDate > $returnDate) {
-                    $difference = $currentDate->diff($returnDate)->days; // Difference in days
-                    $fine = $difference * 10;
-                } else {
-                    $fine = 0;
-                }
-                echo "<td>" . $fine . "</td>";
-                echo "</tr>";
+            echo "<td>" . $row["title"] . "</td>";
+            echo "<td>" . $row["customer"] . "</td>";
+            // Calculate fine based on the return date
+            $returnDate = new DateTime($row["returnDate"]);
+            $currentDate = new DateTime();
+            if($currentDate > $returnDate) {
+                $difference = $currentDate->diff($returnDate)->days; // Difference in days
+                $fine = $difference * 10;
+            } else {
+                $fine = 0;
             }
-            echo "</tbody>";
-            echo "</table>";
-            echo "</div>";
-            echo "<br/>";
-        } else {
-            echo "<div class='alert alert-info' role='alert'>No fines.</div>";
+            echo "<td>" . $fine . "</td>";
+            echo "</tr>";
         }
+        echo "</tbody>";
+        echo "</table>";
+        echo "</div>";
+        echo "<br/>";
+    } else {
+        echo "<div class='alert alert-info' role='alert'>No fines.</div>";
+    }
 
-        // Close connection
-        $conn->close();
-        ?>
+    // Close connection
+    $conn->close();
+    ?>
         
     </div>
 
